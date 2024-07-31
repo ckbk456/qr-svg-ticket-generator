@@ -5,6 +5,7 @@ from tkinter.filedialog import askopenfilename
 import pandas as pd
 from mapping import Mapping
 from bs4 import BeautifulSoup
+from overlay_XML_prep import overlay_modifier, QrAttributes
 
 global template_path
 template_path = "/Users/ckbk/Desktop/SVGTEMPLATE.svg"
@@ -51,45 +52,43 @@ def get_files():
     global df
     global overlay_xml
     global template_xml
-    if csv_path and overlay_path and template_path:
-        print(csv_path, overlay_path, template_path)
-
-        with open(csv_path) as file:
-            global df
-            df = pd.read_csv(file)
-
-        with open(overlay_path, "rb") as file:
-            global overlay_xml
-            overlay_xml = file.read()
-
-        with open(template_path, "rb") as file:
-            global template_xml
-            template_xml = file.read()
+    try:
+        if csv_path and overlay_path and template_path:
+            print(csv_path, overlay_path, template_path)
+            with open(csv_path) as file:
+                global df
+                df = pd.read_csv(file)
+        else:
+            messagebox.showerror(title='Error', message='Please select all necessary files')
+    except Exception as e:
+        messagebox.showerror(title='Error', message=str(e))
     else:
-        messagebox.showerror(title='Error', message='Please select all necessary files')
-
-    df_headers = df.columns.values.tolist()
-    # print(overlay_xml)
-    # print(template_xml)
-
-    global map
-    map = Mapping()
-    Mapping.init(self=map, headings_list=df_headers)
+        df_headers = df.columns.values.tolist()
+        global map
+        map = Mapping()
+        Mapping.init(self=map, headings_list=df_headers)
 
 def generate_tickets():
     global map
     global df
     replacements = map.pairings
-    global overlay_xml
-    overlay_decoded = overlay_xml.decode('utf-8')
-    global template_xml
+    global overlay_soup
+
+    with open(overlay_path, "rb") as f:
+        overlay_soup = BeautifulSoup(f, "lxml-xml")
+
+    new_overlay_soup = overlay_modifier(overlay_soup)
+    print(type(new_overlay_soup))
+
+
+
 
     # print(type(overlay_xml), overlay_xml, replacements)
-    for row in df.iterrows():
-        for placeholder,replacement in replacements.items():
-            new_str = overlay_decoded.replace(placeholder,row[1][replacement])
-        with open(f"{row}test.svg", "w") as file:
-            file.write(new_str)
+    # for row in df.iterrows():
+    #     for placeholder,replacement in replacements.items():
+    #         new_str = overlay_decoded.replace(placeholder,row[1][replacement])
+    #     with open(f"{row}test.svg", "w") as file:
+    #         file.write(new_str)
 
 
 

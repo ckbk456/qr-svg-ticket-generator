@@ -13,6 +13,7 @@ class Mapping:
             if item["entry"].get() != '':
                 self.pairings.update({item["entry"].get():item["heading"]['text']})
                 # print(self.pairings)
+        messagebox.showinfo(title='Mappings saved', message=f"{self.pairings}")
 
     def init(self,headings_list):
         Label(master=self.map, text="Keyword and column mapping", font=('courier', 12, "bold")).grid(column=0, columnspan=len(headings_list),row=0, padx=10)
