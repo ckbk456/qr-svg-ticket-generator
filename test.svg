@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 283.46 141.73">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: iCielStabile-Regular, 'iCiel Stabile';
+        stroke: #7d4a97;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-2, .cls-3 {
+        font-size: 12px;
+      }
+
+      .cls-1, .cls-3 {
+        fill: #1d1d1b;
+      }
+
+      .cls-4 {
+        fill: #348c83;
+      }
+
+      .cls-2 {
+        fill: #e84c0f;
+        font-family: MontserratRoman-Regular, Montserrat;
+        font-variation-settings: 'wght' 400;
+      }
+
+      .cls-3 {
+        font-family: Chalkduster, Chalkduster;
+      }
+    </style>
+  </defs>
+  <text class="cls-2" transform="translate(33.16 44.33)"><tspan x="0" y="0">[HỌ VÀ TÊN]</tspan></text>
+  <text class="cls-3" transform="translate(33.16 76.16)"><tspan x="0" y="0">khangcao.art@gmail.com</tspan></text>
+  <text class="cls-1" transform="translate(33.16 104.75)"><tspan x="0" y="0">[SEAT]</tspan></text>
+  <rect class="cls-4" x="177.15" y="32.13" width="82.23" height="82.23"/>
+</svg>
