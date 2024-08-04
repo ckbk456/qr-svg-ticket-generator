@@ -1,43 +1,43 @@
 import qrcode
 import qrcode.image.svg
 from bs4 import BeautifulSoup
-# import qrcode.image.styles.
-from xml_modifier import qr_modifier
 
-# <rect class="cls-4" height="82.23" width="82.23" x="177.15" y="32.13"/>
+
 def generate_qr(data):
-
     factory = qrcode.image.svg.SvgImage
-
     qr = qrcode.QRCode(
         image_factory=factory,
         version=5,
         error_correction=qrcode.constants.ERROR_CORRECT_Q,
         box_size=10,
-        border=0,)
+        border=0, )
     qr.add_data(data)
     qr.make(fit=True)
 
+    qr_svg = qr.make_image(attrib={'class': 'some-css-class'})
+    qr_svg_str = qr_svg.to_string(encoding="utf-8").decode("utf-8")
 
-    svg = qr.make_image(attrib={'class': 'some-css-class'})
-    svg_bytes = svg.to_string(encoding="utf-8")
-    svg_str = svg_bytes.decode("utf-8")
-    return str(svg_str)
+    return str(qr_svg_str)
 
-# def create_qr():
-#     # qr_image = f"temp/{file_name}.png"
-#     # overlay_pdf_name = f"temp/{file_name}overlay.pdf"
-#     # ticket_pdf_name = f"final/{file_name}.pdf"
-#
-#     qr = QRCode(
-#         version=1,
-#         error_correction=constants.ERROR_CORRECT_L,
-#         box_size=10,
-#         border=0,
-#     )
-#     qr.add_data(file_content)
-#     qr.make(fit=True)
-#
-#     img = qr.make_image(fill_color="black", back_color="white")
-#     print(type(img))  # qrcode.image.pil.PilImage
-#     img.save(qr_image)
+
+def modify_qr(qr_str, qr_attributes):
+    qr_relative = qr_str.replace("mm", '')
+    qr_soup = BeautifulSoup(qr_relative, "lxml-xml")
+
+    original_height = qr_soup.svg["height"]
+    height_ratio = float(qr_attributes["height"]) / float(original_height)
+    original_width = qr_soup.svg["width"]
+    width_ratio = float(qr_attributes["width"]) / float(original_width)
+
+    qr_soup.svg['x'] = qr_attributes["x"]
+    qr_soup.svg['y'] = qr_attributes["y"]
+    qr_soup.svg['width'] = qr_attributes["width"]
+    qr_soup.svg['height'] = qr_attributes["height"]
+
+    for i in qr_soup.find_all("rect"):
+        i["height"] = float(i["height"]) * height_ratio
+        i["width"] = float(i["width"]) * width_ratio
+        i["x"] = float(i["x"]) * width_ratio
+        i["y"] = float(i["y"]) * height_ratio
+
+    return str(qr_soup)
